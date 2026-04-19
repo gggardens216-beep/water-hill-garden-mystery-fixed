@@ -385,7 +385,8 @@ export default function App() {
 
   const go = (next) => setStage(next)
   const goToPuzzle = (index, next) => {
-    setPuzzleIndex(index)
+    const safeIndex = Math.min(Math.max(index, 0), stepsData.length - 1)
+    setPuzzleIndex(safeIndex)
     setNextStoryStage(next)
     go(STAGES.PUZZLE)
   }
@@ -411,7 +412,8 @@ export default function App() {
   }
 
   if (stage === STAGES.PUZZLE) {
-    return <PuzzleScreen step={stepsData[puzzleIndex]} onSkip={() => go(nextStoryStage)} />
+    const currentStep = stepsData[puzzleIndex] ?? stepsData[0]
+    return <PuzzleScreen step={currentStep} onSkip={() => go(nextStoryStage)} />
   }
 
   if (stage === STAGES.CLUE_ONE) {
