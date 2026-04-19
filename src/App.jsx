@@ -382,7 +382,10 @@ function PuzzleScreen({ step, stepNumber, totalSteps, onSkip }) {
       <h2 className="text-2xl font-bold text-amber-300 mb-3 tracking-wide" style={{ fontFamily: 'serif' }}>
         謎解きポイント
       </h2>
-      <p className="text-amber-200 text-xs mb-2">
+      <p
+        className="text-amber-200 text-xs mb-2"
+        aria-label={`問題 ${stepNumber} / ${totalSteps}`}
+      >
         第{stepNumber}問 / 全{totalSteps}問
       </p>
       <p className="text-green-200 text-sm mb-3">{step.title}</p>
