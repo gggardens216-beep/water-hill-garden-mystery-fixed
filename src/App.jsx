@@ -418,8 +418,7 @@ export default function App() {
   }
 
   if (stage === STAGES.PUZZLE) {
-    if (stepsData.length === 0) return null
-    const currentStep = stepsData[puzzleIndex] ?? stepsData[0]
+    const currentStep = stepsData[puzzleIndex]
     return <PuzzleScreen step={currentStep} onSkip={() => go(nextStoryStage)} />
   }
 
