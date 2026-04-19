@@ -25,10 +25,13 @@ export function useCameraScanning() {
 
       if (videoRef.current) {
         videoRef.current.srcObject = stream
-        await videoRef.current.play().catch(() => {})
+        await videoRef.current.play().catch((error) => {
+          console.error('Video playback failed:', error)
+        })
       }
       return true
-    } catch {
+    } catch (error) {
+      console.error('Camera start failed:', error)
       setCameraError('カメラを起動できませんでした。ブラウザ権限と HTTPS を確認してください。')
       return false
     }
