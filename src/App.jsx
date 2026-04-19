@@ -82,7 +82,7 @@ const storyContent = {
     title: '序章 ― 庭師の手紙',
     lines: [
       '1924年、Water Hill Gardenに一人の老庭師がいた。',
-      '彼の名は吉田源三郎。五十年以上、この庭を守り続けた男だ。',
+      '彼の名は吉田定一。五十年以上、この庭を守り続けた男だ。',
       '死の床で彼は言った。「この庭には、百年後の者へ贈り物を隠した。',
       '四つ葉のクローバーを探しなさい。そこに全ての答えがある。」',
       '百年の時が流れた今、あなたの手にその謎が委ねられた。',
@@ -97,7 +97,7 @@ const storyContent = {
       '石碑の裏に、擦り切れた手書きのメモが貼り付けてある。',
       '「四つ葉のクローバーは、最も古い木の根元に眠る。',
       '　その木は百年前、私が幼い娘のために植えたものだ。」',
-      '―― 吉田源三郎、大正十三年秋',
+      '―― 吉田定一、大正十三年秋',
     ],
   },
   clueTwo: {
@@ -114,7 +114,7 @@ const storyContent = {
   final: {
     title: '最終章 ― 時を超えた絆',
     lines: [
-      'あなたは今、百年の時を超えた吉田源三郎のメッセージを受け取った。',
+      'あなたは今、百年の時を超えた吉田定一のメッセージを受け取った。',
       'この庭は単なる花と木の集まりではない。',
       'それは世代を超えた愛と、生命の連続性の証だ。',
       '吉田観賞魚の錦鯉が泳ぐ池、グリーンギャラリーの温室、',
@@ -141,7 +141,7 @@ function TitleScreen({ onStart }) {
 
       <div className="bg-black/30 rounded-2xl p-6 mb-10 max-w-md border border-green-600/40">
         <p className="text-green-100 text-sm leading-relaxed">
-          1924年に始まった物語。老庭師・吉田源三郎が残した謎が、
+          1924年に始まった物語。老庭師・吉田定一が残した謎が、
           百年の時を超えてあなたを待っている。
         </p>
         <p className="text-green-300 text-xs mt-3 italic">
@@ -428,7 +428,7 @@ function EndingScreen({ onRestart }) {
       </h2>
       <p className="text-green-200 text-lg mb-2">おめでとうございます！</p>
       <p className="text-green-300 text-sm mb-8">
-        吉田源三郎の百年の想いを受け取りました。
+        吉田定一の百年の想いを受け取りました。
       </p>
 
       <div className="bg-black/30 rounded-2xl p-6 max-w-md border border-amber-600/30 mb-8">
@@ -437,7 +437,7 @@ function EndingScreen({ onRestart }) {
           そして想いは、時を超えて人から人へと受け継がれる。<br />
           この庭を訪れたあなたもまた、百年の物語の一部だ。」
         </p>
-        <p className="text-green-400 text-xs mt-3">― 吉田源三郎</p>
+        <p className="text-green-400 text-xs mt-3">― 吉田定一</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3 max-w-sm w-full mb-8 text-xs">
