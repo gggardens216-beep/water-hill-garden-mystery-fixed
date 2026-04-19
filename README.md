@@ -1,16 +1,22 @@
-# React + Vite
+# water-hill-garden-mystery-fixed
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Water Hill Garden（吉田観賞魚・グリーンギャラリーガーデンズ・ガーデンズマルシェ・オコジュ）を舞台にした、次世代型周遊ミステリーWebアプリです。
 
-Currently, two official plugins are available:
+## 構成
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- `index.html`: アプリの入り口（Googleフォント読み込みを含む）
+- `package.json`: React/Vite/Tailwind などの依存管理
+- `vite.config.js`: Vite設定
+- `tailwind.config.js`: カラー・フォントを含むデザインシステム設定
+- `src/main.jsx`: React起動エントリーポイント
+- `src/index.css`: Tailwindベーススタイル
+- `src/App.jsx`: ストーリー進行とUIのメインロジック
 
-## React Compiler
+## 開発コマンド
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+npm run dev
+npm run lint
+npm run build
+```
