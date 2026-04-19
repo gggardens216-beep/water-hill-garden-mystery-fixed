@@ -132,14 +132,17 @@ function StoryPanel({ title, lines, onNext, nextLabel = '次へ進む', icon = '
 
   useEffect(() => {
     setVisibleLines(0)
-    let i = 0
+    if (lines.length === 0) return undefined
+
     const timer = setInterval(() => {
-      i += 1
-      setVisibleLines(i)
-      if (i >= lines.length) clearInterval(timer)
-    }, 600)
+      setVisibleLines((prev) => {
+        const next = Math.min(prev + 1, lines.length)
+        if (next >= lines.length) clearInterval(timer)
+        return next
+      })
+    }, 500)
     return () => clearInterval(timer)
-  }, [lines])
+  }, [title, lines.length])
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-950 via-green-900 to-emerald-950 flex flex-col items-center justify-center px-6 py-10">
@@ -182,15 +185,43 @@ function ARScanScreen({ onScanComplete }) {
   const startScan = async () => {
     setScanState('scanning')
     setProgress(0)
+    setCameraError(null)
 
     try {
+      // カメラ利用には HTTPS（または localhost）+ ブラウザ権限許可が必要
+      if (!window.isSecureContext) {
+        throw new Error('InsecureContext')
+      }
+      if (!navigator.mediaDevices?.getUserMedia) {
+        throw new Error('MediaDevicesUnavailable')
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
       if (videoRef.current) {
         videoRef.current.srcObject = stream
-        videoRef.current.play()
+        await new Promise((resolve) => {
+          if (videoRef.current.readyState >= 1) {
+            resolve()
+            return
+          }
+          videoRef.current.onloadedmetadata = () => resolve()
+        })
+        await videoRef.current.play()
       }
-    } catch {
-      setCameraError('カメラへのアクセスが許可されていません。シミュレーションモードで続行します。')
+    } catch (error) {
+      let message = 'カメラを起動できませんでした。ブラウザ設定を確認し、シミュレーションモードで続行してください。'
+      if (error?.name === 'NotAllowedError') {
+        message = 'カメラ権限が拒否されています。ブラウザでカメラを許可してください。'
+      } else if (error?.name === 'NotFoundError') {
+        message = 'カメラデバイスが見つかりませんでした。別の端末でお試しください。'
+      } else if (error?.name === 'NotReadableError') {
+        message = 'カメラが他アプリで使用中の可能性があります。カメラを解放して再試行してください。'
+      } else if (error?.message === 'InsecureContext') {
+        message = 'カメラ機能は HTTPS 環境（または localhost）でのみ利用できます。'
+      } else if (error?.message === 'MediaDevicesUnavailable') {
+        message = 'このブラウザはカメラ API に対応していません。'
+      }
+      setCameraError(`${message} シミュレーションモードに切り替えます。`)
       setScanState('fallback')
     }
 
@@ -221,6 +252,7 @@ function ARScanScreen({ onScanComplete }) {
             ref={videoRef}
             className="w-full h-full object-cover"
             muted
+            autoPlay
             playsInline
           />
         )}
