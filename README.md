@@ -1,2 +1,16 @@
-# water-hill-garden-mystery-fixed
-Water Hill Garden 100年の庭園と四つ葉の継承 ​東京都八王子市の複合施設「Water Hill Garden（吉田観賞魚・グリーンギャラリーガーデンズ・ガーデンズマルシェ・オコジュ）」を舞台にした、次世代型周遊AR謎解きゲームのWebアプリです。 ​🌟 特徴 ​没入型ストーリー: 100年前の庭師と現代の自分を繋ぐ物語。 ​ARスキャン演出: ブラウザのカメラ機能を使用し、現地の看板や石碑をスキャンする体験を提供。 
+# React + Vite
+
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+
+## React Compiler
+
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
