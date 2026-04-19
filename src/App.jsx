@@ -168,7 +168,8 @@ function App() {
         setIsScanning(false)
         setScannedPoints((prev) => new Set([...prev, current.id]))
       }, 3000)
-    } catch {
+    } catch (error) {
+      console.error('Camera initialization failed:', error)
       setCameraError('カメラを起動できませんでした。ブラウザの設定を確認してください。')
       scanTimeoutRef.current = setTimeout(() => {
         setIsScanning(false)
