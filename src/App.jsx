@@ -4,11 +4,30 @@ const STAGES = {
   TITLE: 'title',
   PROLOGUE: 'prologue',
   AR_SCAN: 'ar_scan',
+  PUZZLE: 'puzzle',
   CLUE_ONE: 'clue_one',
   CLUE_TWO: 'clue_two',
   FINAL: 'final',
   ENDING: 'ending',
 }
+
+const stepsData = [
+  {
+    location: '吉田観賞魚 創業の碑',
+    puzzle: '石碑に隠された手がかりを読み解き、次に向かうべき場所を推理してください。',
+    hint: '石碑の裏にある手書きメモに注目すると、次の場所を示す言葉が見つかります。',
+  },
+  {
+    location: '古い楠の根元',
+    puzzle: '箱に残された写真と言葉から、四つ葉に込められた意味を読み解いてください。',
+    hint: '写真の裏書きには、四つ葉の4つの象徴が明記されています。',
+  },
+  {
+    location: '中央庭園',
+    puzzle: 'これまでの手がかりを繋ぎ、庭師が百年後へ託したメッセージを完成させてください。',
+    hint: '過去と現在、人と自然を繋ぐ言葉が最終章の鍵です。',
+  },
+]
 
 const storyContent = {
   prologue: {
@@ -274,6 +293,45 @@ function ARScanScreen({ onScanComplete }) {
   )
 }
 
+function PuzzleScreen({ step, onSkip }) {
+  const [showHint, setShowHint] = useState(false)
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-green-950 via-green-900 to-emerald-950 flex flex-col items-center justify-center px-6 py-10 text-center">
+      <div className="text-5xl mb-4">🧩</div>
+      <h2 className="text-2xl font-bold text-amber-300 mb-3 tracking-wide" style={{ fontFamily: 'serif' }}>
+        謎解きポイント
+      </h2>
+      <p className="text-green-300 text-xs mb-6">📍 {step.location}</p>
+
+      <div className="bg-black/40 rounded-2xl p-6 max-w-lg w-full border border-green-700/40 mb-4">
+        <p className="text-green-100 text-sm leading-relaxed">{step.puzzle}</p>
+      </div>
+
+      <button
+        onClick={() => setShowHint((prev) => !prev)}
+        className="inline-flex items-center gap-2 bg-emerald-700 hover:bg-emerald-600 text-white font-semibold py-2 px-5 rounded-full shadow transition-all duration-200 hover:scale-105 active:scale-95 mb-4"
+      >
+        <span aria-hidden="true">❓</span>
+        {showHint ? 'ヒントを閉じる' : '庭師のヒント'}
+      </button>
+
+      {showHint && (
+        <div className="bg-amber-100/95 text-emerald-950 rounded-xl p-4 max-w-lg w-full border border-amber-300 mb-6">
+          <p className="text-sm leading-relaxed">{step.hint}</p>
+        </div>
+      )}
+
+      <button
+        onClick={onSkip}
+        className="bg-green-600 hover:bg-green-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-all duration-200 hover:scale-105 active:scale-95"
+      >
+        スキップして次のストーリーへ
+      </button>
+    </div>
+  )
+}
+
 function EndingScreen({ onRestart }) {
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-900 via-green-800 to-green-900 flex flex-col items-center justify-center px-6 text-center">
@@ -342,7 +400,11 @@ export default function App() {
   }
 
   if (stage === STAGES.AR_SCAN) {
-    return <ARScanScreen onScanComplete={() => go(STAGES.CLUE_ONE)} />
+    return <ARScanScreen onScanComplete={() => go(STAGES.PUZZLE)} />
+  }
+
+  if (stage === STAGES.PUZZLE) {
+    return <PuzzleScreen step={stepsData[0]} onSkip={() => go(STAGES.CLUE_ONE)} />
   }
 
   if (stage === STAGES.CLUE_ONE) {
