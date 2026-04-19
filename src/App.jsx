@@ -13,17 +13,65 @@ const STAGES = {
 
 const stepsData = [
   {
+    id: 1,
+    title: '始まりの1921',
     location: '吉田観賞魚 創業の碑',
-    puzzle: '石碑に隠された手がかりを読み解き、次に向かうべき場所を推理してください。',
-    hint: '石碑の裏にある手書きメモに注目すると、次の場所を示す言葉が見つかります。',
+    puzzle: 'この庭園が生まれた年を探せ。それは全ての命の源となるコードである。現地にある石碑をカメラに収めてください。',
+    hint: '石碑に刻まれた「大正10年」を西暦に変換してみてください。',
   },
   {
+    id: 2,
+    title: '庭師の暗号',
     location: '古い楠の根元',
-    puzzle: '箱に残された写真と言葉から、四つ葉に込められた意味を読み解いてください。',
-    hint: '写真の裏書きには、四つ葉の4つの象徴が明記されています。',
+    puzzle: '古い木札に「水→山→池→光」と刻まれている。最後に向かうべき場所を示す語を導け。',
+    hint: '順番ではなく、庭園の導線を逆にたどると意味が見えてきます。',
   },
   {
+    id: 3,
+    title: '四つ葉の継承',
     location: '中央庭園',
+    puzzle: '四つ葉のクローバーに託された4つの言葉を順に並べ、欠けた1語を答えよ。',
+    hint: '写真の裏にある「希望・信念・愛・？」の並びを確認してください。',
+  },
+  {
+    id: 4,
+    title: '水面の合図',
+    location: '錦鯉の池',
+    puzzle: '池の案内板にある3つの漢字を組み合わせ、庭師が残した合言葉を完成させよ。',
+    hint: '「水」「命」「循環」の3語が鍵です。',
+  },
+  {
+    id: 5,
+    title: '温室の記録',
+    location: 'グリーンギャラリー',
+    puzzle: '温室入口のプレートに記された年号と植物名から、次の地点番号を求めよ。',
+    hint: '数字は足し算ではなく、桁を並べて読みます。',
+  },
+  {
+    id: 6,
+    title: '市場の詩',
+    location: 'ガーデンズマルシェ',
+    puzzle: '壁にある詩の空欄を埋め、庭師が大切にした価値を1語で答えよ。',
+    hint: '「土から始まり、土へ還る」の一節に注目してください。',
+  },
+  {
+    id: 7,
+    title: '静寂の庭',
+    location: 'オコジュ',
+    puzzle: '小径の道標に刻まれた方角をたどり、最後に指す方位を答えよ。',
+    hint: '東→南→西→? と90度ずつ回転しています。',
+  },
+  {
+    id: 8,
+    title: '百年の鍵',
+    location: '記念アーチ',
+    puzzle: 'アーチの銘文にある3つの数字を並び替え、解錠コードを作成せよ。',
+    hint: '最も古い年を先頭に置くと正しい順序になります。',
+  },
+  {
+    id: 9,
+    title: '継がれる物語',
+    location: '終章の掲示板',
     puzzle: 'これまでの手がかりを繋ぎ、庭師が百年後へ託したメッセージを完成させてください。',
     hint: '過去と現在、人と自然を繋ぐ言葉が最終章の鍵です。',
   },
@@ -325,7 +373,7 @@ function ARScanScreen({ onScanComplete }) {
   )
 }
 
-function PuzzleScreen({ step, onSkip }) {
+function PuzzleScreen({ step, stepNumber, totalSteps, onSkip }) {
   const [showHint, setShowHint] = useState(false)
 
   return (
@@ -334,6 +382,10 @@ function PuzzleScreen({ step, onSkip }) {
       <h2 className="text-2xl font-bold text-amber-300 mb-3 tracking-wide" style={{ fontFamily: 'serif' }}>
         謎解きポイント
       </h2>
+      <p className="text-amber-200 text-xs mb-2">
+        第{stepNumber}問 / 全{totalSteps}問
+      </p>
+      <p className="text-green-200 text-sm mb-3">{step.title}</p>
       <p className="text-green-300 text-xs mb-6">📍 {step.location}</p>
 
       <div className="bg-black/40 rounded-2xl p-6 max-w-lg w-full border border-green-700/40 mb-4">
@@ -428,6 +480,14 @@ export default function App() {
     setNextStoryStage(next)
     go(STAGES.PUZZLE)
   }
+  const handlePuzzleSkip = () => {
+    const hasNextPuzzle = puzzleIndex < stepsData.length - 1
+    if (nextStoryStage === STAGES.ENDING && hasNextPuzzle) {
+      goToPuzzle(puzzleIndex + 1, STAGES.ENDING)
+      return
+    }
+    go(nextStoryStage)
+  }
 
   if (stage === STAGES.TITLE) {
     return <TitleScreen onStart={() => go(STAGES.PROLOGUE)} />
@@ -446,12 +506,19 @@ export default function App() {
   }
 
   if (stage === STAGES.AR_SCAN) {
-    return <ARScanScreen onScanComplete={() => goToPuzzle(0, STAGES.CLUE_ONE)} />
+    return <ARScanScreen onScanComplete={() => go(STAGES.CLUE_ONE)} />
   }
 
   if (stage === STAGES.PUZZLE) {
     const currentStep = stepsData[puzzleIndex]
-    return <PuzzleScreen step={currentStep} onSkip={() => go(nextStoryStage)} />
+    return (
+      <PuzzleScreen
+        step={currentStep}
+        stepNumber={puzzleIndex + 1}
+        totalSteps={stepsData.length}
+        onSkip={handlePuzzleSkip}
+      />
+    )
   }
 
   if (stage === STAGES.CLUE_ONE) {
@@ -460,7 +527,7 @@ export default function App() {
         title={storyContent.clueOne.title}
         lines={storyContent.clueOne.lines}
         icon="🪨"
-        onNext={() => goToPuzzle(1, STAGES.CLUE_TWO)}
+        onNext={() => goToPuzzle(0, STAGES.CLUE_TWO)}
         nextLabel="古い楠を探す"
       />
     )
@@ -472,7 +539,7 @@ export default function App() {
         title={storyContent.clueTwo.title}
         lines={storyContent.clueTwo.lines}
         icon="🍀"
-        onNext={() => goToPuzzle(2, STAGES.FINAL)}
+        onNext={() => goToPuzzle(1, STAGES.FINAL)}
         nextLabel="最後の真実へ"
       />
     )
@@ -484,7 +551,7 @@ export default function App() {
         title={storyContent.final.title}
         lines={storyContent.final.lines}
         icon="🌟"
-        onNext={() => go(STAGES.ENDING)}
+        onNext={() => goToPuzzle(2, STAGES.ENDING)}
         nextLabel="物語を締めくくる"
       />
     )
