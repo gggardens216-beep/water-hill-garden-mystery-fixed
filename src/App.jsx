@@ -380,8 +380,15 @@ function EndingScreen({ onRestart }) {
 
 export default function App() {
   const [stage, setStage] = useState(STAGES.TITLE)
+  const [puzzleIndex, setPuzzleIndex] = useState(0)
+  const [nextStoryStage, setNextStoryStage] = useState(STAGES.CLUE_ONE)
 
   const go = (next) => setStage(next)
+  const goToPuzzle = (index, next) => {
+    setPuzzleIndex(index)
+    setNextStoryStage(next)
+    go(STAGES.PUZZLE)
+  }
 
   if (stage === STAGES.TITLE) {
     return <TitleScreen onStart={() => go(STAGES.PROLOGUE)} />
@@ -400,11 +407,11 @@ export default function App() {
   }
 
   if (stage === STAGES.AR_SCAN) {
-    return <ARScanScreen onScanComplete={() => go(STAGES.PUZZLE)} />
+    return <ARScanScreen onScanComplete={() => goToPuzzle(0, STAGES.CLUE_ONE)} />
   }
 
   if (stage === STAGES.PUZZLE) {
-    return <PuzzleScreen step={stepsData[0]} onSkip={() => go(STAGES.CLUE_ONE)} />
+    return <PuzzleScreen step={stepsData[puzzleIndex]} onSkip={() => go(nextStoryStage)} />
   }
 
   if (stage === STAGES.CLUE_ONE) {
@@ -413,7 +420,7 @@ export default function App() {
         title={storyContent.clueOne.title}
         lines={storyContent.clueOne.lines}
         icon="🪨"
-        onNext={() => go(STAGES.CLUE_TWO)}
+        onNext={() => goToPuzzle(1, STAGES.CLUE_TWO)}
         nextLabel="古い楠を探す"
       />
     )
@@ -425,7 +432,7 @@ export default function App() {
         title={storyContent.clueTwo.title}
         lines={storyContent.clueTwo.lines}
         icon="🍀"
-        onNext={() => go(STAGES.FINAL)}
+        onNext={() => goToPuzzle(2, STAGES.FINAL)}
         nextLabel="最後の真実へ"
       />
     )
